@@ -8,8 +8,12 @@ class Timeline(Base):
     `Timeline` provides functions like switching and playing between multiple charts.
     """
 
-    def __init__(self, init_opts: types.Init = opts.InitOpts()):
-        super().__init__(init_opts=init_opts)
+    def __init__(
+        self,
+        init_opts: types.Init = opts.InitOpts(),
+        render_opts: types.RenderInit = opts.RenderOpts(),
+    ):
+        super().__init__(init_opts=init_opts, render_opts=render_opts)
         self.options = {"baseOption": {"series": [], "timeline": {}}, "options": []}
         self.add_schema()
         self._time_points: types.Sequence = []
@@ -17,6 +21,7 @@ class Timeline(Base):
     def add_schema(
         self,
         axis_type: str = "category",
+        current_index: types.Numeric = 0,
         orient: str = "horizontal",
         symbol: types.Optional[str] = None,
         symbol_size: types.Optional[types.Numeric] = None,
@@ -33,16 +38,20 @@ class Timeline(Base):
         pos_bottom: types.Optional[str] = "-5px",
         width: types.Optional[str] = None,
         height: types.Optional[str] = None,
-        linestyle_opts: types.Union[opts.LineStyleOpts, dict, None] = None,
-        label_opts: types.Optional[opts.LabelOpts] = None,
+        linestyle_opts: types.LineStyle = None,
+        label_opts: types.Label = None,
         itemstyle_opts: types.ItemStyle = None,
         graphic_opts: types.Graphic = None,
         checkpointstyle_opts: types.TimeLinkCheckPoint = None,
         controlstyle_opts: types.TimeLineControl = None,
+        progress_linestyle_opts: types.LineStyle = None,
+        progress_itemstyle_opts: types.ItemStyle = None,
+        progress_label_opts: types.Label = None,
     ):
         self.options.get("baseOption").get("timeline").update(
             {
                 "axisType": axis_type,
+                "currentIndex": current_index,
                 "orient": orient,
                 "autoPlay": is_auto_play,
                 "controlPosition": control_position,
@@ -65,6 +74,11 @@ class Timeline(Base):
                 "graphic": graphic_opts,
                 "checkpointStyle": checkpointstyle_opts,
                 "controlStyle": controlstyle_opts,
+                "progress": {
+                    "lineStyle": progress_linestyle_opts,
+                    "itemStyle": progress_itemstyle_opts,
+                    "label": progress_label_opts,
+                },
             }
         )
         return self
@@ -78,7 +92,6 @@ class Timeline(Base):
         self.options.get("options").append(
             {
                 "backgroundColor": chart.options.get("backgroundColor"),
-                "legend": chart.options.get("legend"),
                 "series": chart.options.get("series"),
                 "xAxis": chart.options.get("xAxis"),
                 "yAxis": chart.options.get("yAxis"),
@@ -88,6 +101,10 @@ class Timeline(Base):
                 "color": chart.options.get("color"),
                 "graphic": chart.options.get("graphic"),
                 "bmap": chart.options.get("bmap"),
+                "toolbox": chart.options.get("toolbox"),
+                "dataset": chart.options.get("dataset"),
+                "radiusAxis": chart.options.get("radiusAxis"),
+                "angleAxis": chart.options.get("angleAxis"),
             }
         )
         self.__check_components(chart)
@@ -107,6 +124,7 @@ class Timeline(Base):
             "visualMap",
             "dataZoom",
             "parallelAxis",
+            "legend",
         ]
 
         for component in components:

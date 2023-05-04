@@ -17,7 +17,6 @@ class TreeMap(Chart):
         series_name: str,
         data: types.Sequence[types.Union[opts.TreeItem, dict]],
         *,
-        is_selected: bool = True,
         leaf_depth: types.Optional[types.Numeric] = None,
         pos_left: types.Optional[str] = None,
         pos_right: types.Optional[str] = None,
@@ -33,6 +32,7 @@ class TreeMap(Chart):
         levels: types.TreeMapLevel = None,
         visual_min: types.Optional[types.Numeric] = None,
         visual_max: types.Optional[types.Numeric] = None,
+        visual_dimension: types.Optional[types.Numeric] = None,
         color_alpha: types.Union[types.Numeric, types.Sequence] = None,
         color_saturation: types.Union[types.Numeric, types.Sequence] = None,
         color_mapping_by: str = "index",
@@ -44,7 +44,7 @@ class TreeMap(Chart):
         itemstyle_opts: types.ItemStyle = None,
         breadcrumb_opts: types.TreeMapBreadcrumb = None,
     ):
-        self._append_legend(series_name, is_selected)
+        self._append_legend(series_name)
         self.options.get("series").append(
             {
                 "type": ChartType.TREEMAP,
@@ -58,7 +58,7 @@ class TreeMap(Chart):
                 "bottom": pos_bottom,
                 "squareRatio": square_ratio,
                 "label": label_opts,
-                "upperlabel": upper_label_opts,
+                "upperLabel": upper_label_opts,
                 "leafDepth": leaf_depth,
                 "drillDownIcon": drilldown_icon,
                 "roam": roam,
@@ -67,6 +67,7 @@ class TreeMap(Chart):
                 "levels": levels,
                 "visualMin": visual_min,
                 "visualMax": visual_max,
+                "visualDimension": visual_dimension,
                 "colorAlpha": color_alpha,
                 "colorSaturation": color_saturation,
                 "colorMappingBy": color_mapping_by,

@@ -18,7 +18,6 @@ class Graph(Chart):
         links: types.Sequence[types.GraphLink],
         categories: types.Union[types.Sequence[types.GraphCategory], None] = None,
         *,
-        is_selected: bool = True,
         is_focusnode: bool = True,
         is_roam: bool = True,
         is_draggable: bool = False,
@@ -26,8 +25,10 @@ class Graph(Chart):
         layout: str = "force",
         symbol: types.Optional[str] = None,
         symbol_size: types.Numeric = 10,
-        edge_length: types.Numeric = 50,
+        edge_length: types.Numeric = 30,
         gravity: types.Numeric = 0.2,
+        friction: types.Numeric = 0.6,
+        is_layout_animation: bool = True,
         repulsion: types.Numeric = 50,
         edge_label: types.Label = None,
         edge_symbol: types.Union[types.Sequence[str], str] = None,
@@ -53,7 +54,7 @@ class Graph(Chart):
             for c in categories:
                 if isinstance(c, opts.GraphCategory):
                     c = c.opts
-                self._append_legend(c.get("name", ""), is_selected)
+                self._append_legend(c.get("name", ""))
 
         if edge_label is None:
             edge_label = opts.LabelOpts(is_show=False)
@@ -71,8 +72,10 @@ class Graph(Chart):
                 "circular": {"rotateLabel": is_rotate_label},
                 "force": {
                     "repulsion": repulsion,
-                    "edgeLength": edge_length,
                     "gravity": gravity,
+                    "edgeLength": edge_length,
+                    "friction": friction,
+                    "layoutAnimation": is_layout_animation,
                 },
                 "label": label_opts,
                 "lineStyle": linestyle_opts,

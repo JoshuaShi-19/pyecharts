@@ -17,14 +17,17 @@ class Bar(RectChart):
         series_name: str,
         y_axis: types.Sequence[types.Union[types.Numeric, opts.BarItem, dict]],
         *,
-        is_selected: bool = True,
         xaxis_index: types.Optional[types.Numeric] = None,
         yaxis_index: types.Optional[types.Numeric] = None,
         is_legend_hover_link: bool = True,
         color: types.Optional[str] = None,
+        is_realtime_sort: bool = False,
         is_show_background: bool = False,
         background_style: types.Union[types.BarBackground, dict, None] = None,
         stack: types.Optional[str] = None,
+        stack_strategy: types.Optional[str] = "samesign",
+        sampling: types.Optional[str] = None,
+        cursor: types.Optional[str] = "pointer",
         bar_width: types.Union[types.Numeric, str] = None,
         bar_max_width: types.Union[types.Numeric, str] = None,
         bar_min_width: types.Union[types.Numeric, str] = None,
@@ -47,7 +50,7 @@ class Bar(RectChart):
         encode: types.Union[types.JSFunc, dict, None] = None,
     ):
         self._append_color(color)
-        self._append_legend(series_name, is_selected)
+        self._append_legend(series_name)
 
         if self.options.get("dataset") is not None:
             y_axis = None
@@ -60,9 +63,13 @@ class Bar(RectChart):
                 "yAxisIndex": yaxis_index,
                 "legendHoverLink": is_legend_hover_link,
                 "data": y_axis,
+                "realtimeSort": is_realtime_sort,
                 "showBackground": is_show_background,
                 "backgroundStyle": background_style,
                 "stack": stack,
+                "stackStrategy": stack_strategy,
+                "sampling": sampling,
+                "cursor": cursor,
                 "barWidth": bar_width,
                 "barMaxWidth": bar_max_width,
                 "barMinWidth": bar_min_width,
