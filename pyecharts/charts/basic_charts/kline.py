@@ -31,6 +31,7 @@ class Kline(RectChart):
         y_axis: types.Sequence[types.Union[opts.CandleStickItem, dict]],
         *,
         color_by: types.Optional[str] = "series",
+        bar_width: types.Optional[types.Numeric] = None,
         layout: types.Optional[str] = None,
         xaxis_index: types.Optional[types.Numeric] = None,
         yaxis_index: types.Optional[types.Numeric] = None,
@@ -38,6 +39,7 @@ class Kline(RectChart):
         markpoint_opts: types.MarkPoint = None,
         tooltip_opts: types.Tooltip = None,
         itemstyle_opts: types.ItemStyle = None,
+        emphasis_opts: types.Emphasis = None,
     ):
         self._append_legend(series_name)
         self.options.get("series").append(
@@ -46,6 +48,7 @@ class Kline(RectChart):
                 "name": series_name,
                 "colorBy": color_by,
                 "layout": layout,
+                "barWidth": bar_width,
                 "xAxisIndex": xaxis_index,
                 "yAxisIndex": yaxis_index,
                 "data": y_axis,
@@ -53,6 +56,7 @@ class Kline(RectChart):
                 "markLine": markline_opts,
                 "tooltip": tooltip_opts,
                 "itemStyle": itemstyle_opts,
+                "emphasis": emphasis_opts,
             }
         )
         return self

@@ -1,6 +1,7 @@
 from ..globals import CurrentConfig, RenderType, ThemeType
 from ..options.series_options import (
     BasicOpts,
+    AreaStyleOpts,
     ItemStyleOpts,
     JSFunc,
     LabelOpts,
@@ -569,7 +570,7 @@ class LegendOpts(BasicOpts):
         legend_icon: Optional[str] = None,
         background_color: Optional[str] = "transparent",
         border_color: Optional[str] = "#ccc",
-        border_width: int = 1,
+        border_width: Optional[int] = None,
         border_radius: Union[int, Sequence] = 0,
         page_button_item_gap: int = 5,
         page_button_gap: Optional[int] = None,
@@ -632,6 +633,7 @@ class VisualMapOpts(BasicOpts):
         type_: str = "color",
         min_: Numeric = 0,
         max_: Numeric = 100,
+        range_: Sequence[Numeric] = None,
         range_text: Optional[Sequence] = None,
         range_color: Optional[Sequence[str]] = None,
         range_size: Optional[Sequence[int]] = None,
@@ -651,7 +653,7 @@ class VisualMapOpts(BasicOpts):
         is_inverse: bool = False,
         precision: Optional[int] = None,
         pieces: Optional[Sequence] = None,
-        out_of_range: Optional[Sequence] = None,
+        out_of_range: Optional[dict] = None,
         item_width: int = 0,
         item_height: int = 0,
         background_color: Optional[str] = None,
@@ -683,6 +685,7 @@ class VisualMapOpts(BasicOpts):
             "max": max_,
             "text": range_text,
             "textStyle": textstyle_opts,
+            "range": range_,
             "inRange": _inrange_op,
             "calculable": is_calculable,
             "inverse": is_inverse,
@@ -1268,6 +1271,15 @@ class SingleAxisOpts(BasicOpts):
         height: Optional[str] = None,
         orient: Optional[str] = None,
         type_: Optional[str] = None,
+        axisline_opts: Union[AxisLineOpts, dict, None] = None,
+        axistick_opts: Union[AxisTickOpts, dict, None] = None,
+        axislabel_opts: Union[LabelOpts, dict, None] = None,
+        axispointer_opts: Union[AxisPointerOpts, dict, None] = None,
+        splitarea_opts: Union[SplitAreaOpts, dict, None] = None,
+        splitline_opts: Union[SplitLineOpts, dict, None] = None,
+        minor_tick_opts: Union[MinorTickOpts, dict, None] = None,
+        minor_split_line_opts: Union[MinorSplitLineOpts, dict, None] = None,
+        tooltip_opts: Union[TooltipOpts, dict, None] = None,
     ):
         self.opts: dict = {
             "name": name,
@@ -1281,6 +1293,15 @@ class SingleAxisOpts(BasicOpts):
             "height": height,
             "orient": orient,
             "type": type_,
+            "axisLine": axisline_opts,
+            "axisTick": axistick_opts,
+            "minorTick": minor_tick_opts,
+            "axisLabel": axislabel_opts,
+            "splitLine": splitline_opts,
+            "minorSplitLine": minor_split_line_opts,
+            "splitArea": splitarea_opts,
+            "axisPointer": axispointer_opts,
+            "tooltip": tooltip_opts,
         }
 
 
@@ -1438,3 +1459,35 @@ class DatasetTransformOpts(BasicOpts):
         is_print: bool = False,
     ):
         self.opts: dict = {"type": type_, "config": config, "print": is_print}
+
+
+class EmphasisOpts(BasicOpts):
+    def __init__(
+        self,
+        is_disabled: bool = False,
+        is_scale: bool = True,
+        focus: str = "none",
+        blur_scope: str = "coordinateSystem",
+        label_opts: Union[LabelOpts, dict, None] = None,
+        is_show_label_line: bool = False,
+        label_linestyle_opts: Union[LineStyleOpts, dict, None] = None,
+        itemstyle_opts: Union[ItemStyleOpts, dict, None] = None,
+        linestyle_opts: Union[LineStyleOpts, dict, None] = None,
+        areastyle_opts: Union[AreaStyleOpts, dict, None] = None,
+        end_label_opts: Union[LabelOpts, dict, None] = None,
+    ):
+        self.opts: dict = {
+            "disabled": is_disabled,
+            "scale": is_scale,
+            "focus": focus,
+            "blurScope": blur_scope,
+            "label": label_opts,
+            "labelLine": {
+                "show": is_show_label_line,
+                "lineStyle": label_linestyle_opts
+            },
+            "itemStyle": itemstyle_opts,
+            "lineStyle": linestyle_opts,
+            "areaStyle": areastyle_opts,
+            "endLabel": end_label_opts,
+        }
